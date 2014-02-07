@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWCFGUI", "TestWCFGUI\TestWCFGUI.csproj", "{4261C225-8BD0-4AAF-99AA-28F049EF5CB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfService", "WcfService\WcfService.csproj", "{9A121E7C-1C80-412C-B4F4-B1B854FCEF5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfHostingWCFApp", "SelfHostingWCFApp\SelfHostingWCFApp.csproj", "{B7438798-7286-4B96-8845-9A70B23C7A18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4261C225-8BD0-4AAF-99AA-28F049EF5CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4261C225-8BD0-4AAF-99AA-28F049EF5CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4261C225-8BD0-4AAF-99AA-28F049EF5CB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A121E7C-1C80-412C-B4F4-B1B854FCEF5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A121E7C-1C80-412C-B4F4-B1B854FCEF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A121E7C-1C80-412C-B4F4-B1B854FCEF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A121E7C-1C80-412C-B4F4-B1B854FCEF5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7438798-7286-4B96-8845-9A70B23C7A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7438798-7286-4B96-8845-9A70B23C7A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7438798-7286-4B96-8845-9A70B23C7A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7438798-7286-4B96-8845-9A70B23C7A18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
