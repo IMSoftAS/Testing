@@ -9,7 +9,7 @@ using WcfService;
 
 namespace SelfHostingWCFApp
 {
-    class Program
+    public class SelfHostingWCFService : IDisposable
     {
         static void Main(string[] args)
         {
@@ -24,6 +24,23 @@ namespace SelfHostingWCFApp
                 host.Close();
             }
             Console.ReadLine();
+        }
+
+        private ServiceHost host
+        {
+            get;
+            set;
+        }
+
+        public SelfHostingWCFService()
+        {
+            host = new ServiceHost(typeof(Service1));
+            host.Open();
+        }
+
+        public void Dispose()
+        {
+            host.Close();
         }
     }
 }

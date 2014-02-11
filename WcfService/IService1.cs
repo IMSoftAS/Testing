@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -20,6 +21,10 @@ namespace WcfService
         [OperationContract]
         [WebGet(UriTemplate = "GetDataString/{s}", ResponseFormat = WebMessageFormat.Json)]
         string GetDataString(string s);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "GetAllDocuments", ResponseFormat = WebMessageFormat.Json)]
+        IList<ArkivDocument> GetAllDocuments();
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);

@@ -34,5 +34,11 @@ namespace WcfService
             }
             return composite;
         }
+
+
+        public IList<Model.ArkivDocument> GetAllDocuments()
+        {
+            return (new IMS.DAL.DataAccess()).TestDataAccess();
+        }
     }
 }
