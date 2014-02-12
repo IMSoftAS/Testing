@@ -5,40 +5,36 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using Newtonsoft.Json;
+using ProtoBuf;
+using IMS.Model;
+using System.IO;
+
+using System.Net;
 
 namespace WcfService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
-    public class Service1 : IService1
-    {
-        public string GetData(int value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
+    
 
+    public class IMSCoreRESTapi : IIMSCoreRESTapi
+    {
         public string GetDataString(string s)
         {
             return string.Format("You entered: {0}", s);
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public Stream GetAllDocuments(string replyformat)
         {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
+            serializationFormat replySerializationFormat;
+            if ( !Enum.TryParse<serializationFormat>( replyformat, true, out replySerializationFormat ) ) {
+                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.BadRequest;
+                WebOperationContext.Current.OutgoingResponse.StatusDescription = "Serialization format is unknown";
+                return new MemoryStream();
             }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
-        }
 
-
-        public IList<Model.ArkivDocument> GetAllDocuments()
-        {
-            return (new IMS.DAL.DataAccess()).TestDataAccess();
-        }
+            var r = (new IMS.DAL.DataAccess()).TestDataAccess();
+            WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
+            return Serializer.Serialize<ArkivDocument[]>(replySerializationFormat, r);
+        }       
     }
 }
