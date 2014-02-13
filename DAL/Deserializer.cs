@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace WcfService
+namespace IMS.DAL
 {
     public class Deserializer
     {

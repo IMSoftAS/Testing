@@ -48,13 +48,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{bd350b78-0b41-4a1f-b9fb-9ce8725707fc}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{6b7076df-ce87-4746-8898-928d49cde6a4}</Project>
       <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RESTDataAccess\RESTDataAccess.csproj">
-      <Project>{40f3ffed-8e3a-411d-b79e-5e85246fc924}</Project>
-      <Name>RESTDataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\WcfService\WcfService.csproj">
       <Project>{9a121e7c-1c80-412c-b4f4-b1b854fcef5c}</Project>

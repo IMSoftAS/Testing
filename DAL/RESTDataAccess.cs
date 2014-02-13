@@ -1,27 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using IMS.Model;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
-using ProtoBuf;
-using IMS.Model;
 
-namespace IMS.Core.RESTDataAccess
+namespace IMS.DAL
 {
-    public class Proxy
+    public class RESTDataAccess : IDataAccess
     {
         public const string UserAgent = "IMSCore REST Proxy";
         public readonly string BaseURI;
         public readonly serializationFormat sFormat;
 
-        public Proxy() {
+        public RESTDataAccess() {
             var baseURI = ConfigurationManager.AppSettings["RESTEndPoint"];
-            if (baseURI.EndsWith("/", StringComparison.InvariantCultureIgnoreCase )){
-                baseURI.TrimEnd('/');
+            if ( baseURI.EndsWith( "/", StringComparison.InvariantCultureIgnoreCase ) ) {
+                baseURI.TrimEnd( '/' );
             }
             BaseURI = baseURI;
 
@@ -30,28 +27,23 @@ namespace IMS.Core.RESTDataAccess
             }
         }
 
-        public T Get<T>( String URI ) where T : class {
+        public Model.ArkivDocument[] GetArkivDocuments(int i) {
+            return Get<ArkivDocument[]>( "/Documents/" + i.ToString() );
+        }
+
+        private T Get<T>( String URI ) where T : class {
             var req = getRequest( URI, HttpMethod.GET );
 
             using ( HttpWebResponse resp = req.GetResponse() as HttpWebResponse ) {
-                return WcfService.Deserializer.Deserialize<T>( sFormat, resp.GetResponseStream() );
+                return Deserializer.Deserialize<T>( sFormat, resp.GetResponseStream() );
             }
         }
-        public void Post<T>( String URI ) where T : class {
-            var req = getRequest(URI, HttpMethod.POST);
-
-            string result = null;
-            using ( HttpWebResponse resp = req.GetResponse() as HttpWebResponse ) {
-                StreamReader reader = new StreamReader( resp.GetResponseStream() );
-                result = reader.ReadToEnd();
-            }
-        }
-
         private enum HttpMethod { GET, POST }
 
-        private HttpWebRequest getRequest(string URI, HttpMethod method) {
-            URI = sanitizeURI(URI);
+        private HttpWebRequest getRequest( string URI, HttpMethod method ) {
+            URI = sanitizeURI( URI );
             HttpWebRequest req = WebRequest.Create( String.Format( "{0}{1}", BaseURI, URI, sFormat.ToString() ) ) as HttpWebRequest;
+            req.Headers.Add( "sFormat", sFormat.ToString() );
             req.Method = method.ToString();
             return req;
         }

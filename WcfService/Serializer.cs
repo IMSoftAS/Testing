@@ -13,8 +13,8 @@ namespace WcfService
     public class Serializer
     {
         public static Stream Serialize<T>( serializationFormat format, T o ) {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
+            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            //sw.Start();
 
             Stream result = new MemoryStream();
             switch ( format ) {
@@ -26,8 +26,8 @@ namespace WcfService
                     break;
             }
 
-            sw.Stop();
-            Console.WriteLine( "{0, -30}{1,5}ms", String.Format("Serialize {0}:", format.ToString()), sw.ElapsedMilliseconds.ToString()  );
+            //sw.Stop();
+            //Console.WriteLine( "{0, -30}{1,5}ms", String.Format("Serialize {0}:", format.ToString()), sw.ElapsedMilliseconds.ToString()  );
 
             return result;
         }
