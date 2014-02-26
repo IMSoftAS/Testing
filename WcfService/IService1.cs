@@ -23,8 +23,24 @@ namespace WcfService
         //[WebGet( UriTemplate = "GetAllDocuments?sFormat={sformat}" )]
         //Stream GetAllDocuments( string sformat );
         
+        //[OperationContract]
+        //[WebGet( UriTemplate = "Documents/{i}" )]
+        //Stream GetAllDocuments(string i);
+
+        //[OperationContract]
+        //[WebGet( UriTemplate = "DocumentsCached/{i}" )]
+        //Stream GetAllDocumentsCached( string i );
+
         [OperationContract]
-        [WebGet( UriTemplate = "Documents/{i}" )]
-        Stream GetAllDocuments(string i);
+        [WebInvoke( UriTemplate = "Documents/", Method = "POST" )]
+        Stream InsertDocument( Stream data );
+
+        [OperationContract]
+        [WebInvoke( UriTemplate = "Documents/{id}", Method = "PUT" )]
+        void UpdateDocument(Stream data, string id );
+
+        [OperationContract]
+        [WebGet( UriTemplate = "Documents?id={id}" )]
+        Stream GetDocument( string id );
     }
 }

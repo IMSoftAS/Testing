@@ -10,11 +10,8 @@ namespace IMS.DAL
 {
     public class Deserializer
     {
-        public static T Deserialize<T>( serializationFormat format, Stream s ) where T : class {
-            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            //sw.Start();
-
-            T result = null;
+        public static T Deserialize<T>( serializationFormat format, Stream s ) {
+            T result = default(T);
             switch ( format ) {
                 case serializationFormat.ProtoBuf:
                     result = deserializeProtobuf<T>( s );
@@ -23,10 +20,6 @@ namespace IMS.DAL
                     result = deserializeJSON<T>( s );
                     break;
             }
-
-            //sw.Stop();
-            //Console.WriteLine( "{0, -30}{1,5}ms", String.Format( "Deserialize {0}:", format.ToString() ), sw.ElapsedMilliseconds.ToString() );
-
             return result;
         }
 

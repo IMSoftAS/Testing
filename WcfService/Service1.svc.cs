@@ -5,54 +5,67 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using Newtonsoft.Json;
-using ProtoBuf;
 using IMS.Model;
 using System.IO;
-
+using IMS.DAL;
 using System.Net;
 
 namespace WcfService
 {
-    
-
     public class IMSCoreRESTapi : IIMSCoreRESTapi
     {
-        public string GetDataString(string s)
-        {
-            return string.Format("You entered: {0}", s);
+        public IMSCoreRESTapi() {
+            var mapDirect = new Dictionary<Type, Type>();
+            mapDirect.Add( typeof( ArkivDocument ), typeof( ArkivDocumentRepository ) );
+            da = new DataAccess( mapDirect );
         }
 
-        //public Stream GetAllDocuments(string replyformat)
-        //{
-        //    serializationFormat replySerializationFormat;
-        //    if ( !Enum.TryParse<serializationFormat>( replyformat, true, out replySerializationFormat ) ) {
-        //        WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.BadRequest;
-        //        WebOperationContext.Current.OutgoingResponse.StatusDescription = "Serialization format is unknown";
-        //        return new MemoryStream();
-        //    }
 
-        //    var r = ( new IMS.DAL.DataAccess() ).GetArkivDocuments();
-        //    WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
-        //    return Serializer.Serialize<ArkivDocument[]>(replySerializationFormat, r);
-        //}
+        private Dictionary<Type, Type> map;
+        private DataAccess da;
 
-
-        public Stream GetAllDocuments(string s) {
-            var headers = WebOperationContext.Current.IncomingRequest.Headers;
-            serializationFormat replySerializationFormat = serializationFormat.JSON;
-            if ( !Enum.TryParse<serializationFormat>( headers["sFormat"], true, out replySerializationFormat ) ) {
-                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.BadRequest;
-                WebOperationContext.Current.OutgoingResponse.StatusDescription = "Serialization format is unknown";
-                return new MemoryStream();
-            }
-            var r = ( new IMS.DAL.DataAccess() ).GetArkivDocuments(int.Parse(s));
-            WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
-            return Serializer.Serialize<ArkivDocument[]>( replySerializationFormat, r );
+        public string GetDataString( string s ) {
+            return string.Format( "You entered: {0}", s );
         }
 
         public Stream GetDocument( string id ) {
-            throw new NotImplementedException();
+            var result = new MemoryStream();
+            Serializer.Serialize<ArkivDocument>( getSerializationFormat(), da.SelectWithId<ArkivDocument>( int.Parse( id ) ), result );
+            result.Position = 0;
+            return result;
+        }
+
+        public Stream InsertDocument( Stream data ) {
+            var sFormat = getSerializationFormat();
+            var doc = Deserializer.Deserialize<ArkivDocument>( sFormat, data );
+            var r = da.Insert<ArkivDocument>( doc );
+            var result = new MemoryStream();
+            Serializer.Serialize<int>( sFormat, r, result );
+            result.Position = 0;
+            return result;
+        }
+
+        public void UpdateDocument( Stream data, string id ) {
+            var sFormat = getSerializationFormat();
+            var doc = Deserializer.Deserialize<ArkivDocument>( sFormat, data );
+            da.Update<ArkivDocument>( doc );
+        }
+
+        private serializationFormat getSerializationFormat() {
+            var headers = WebOperationContext.Current.IncomingRequest.Headers;
+            serializationFormat replySerializationFormat;
+
+            var sFormat = String.Empty;
+            for ( int i = 0; i < headers.Count; ++i ) {
+                if ( headers.GetKey( i ) == "sFormat" ) {
+                    sFormat = headers["sFormat"];
+                    break;
+                }
+            }
+            if ( !Enum.TryParse<serializationFormat>( sFormat, true, out replySerializationFormat ) ) {
+                replySerializationFormat = serializationFormat.JSON;
+            }
+            return replySerializationFormat;
         }
     }
 }

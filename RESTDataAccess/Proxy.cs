@@ -34,7 +34,7 @@ namespace IMS.Core.RESTDataAccess
             var req = getRequest( URI, HttpMethod.GET );
 
             using ( HttpWebResponse resp = req.GetResponse() as HttpWebResponse ) {
-                return WcfService.Deserializer.Deserialize<T>( sFormat, resp.GetResponseStream() );
+                return Deserializer.Deserialize<T>( sFormat, resp.GetResponseStream() );
             }
         }
         public void Post<T>( String URI ) where T : class {
